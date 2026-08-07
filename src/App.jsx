@@ -4468,26 +4468,36 @@ function BlogDetailPage({ navigate, openGuidance, openBooking, slug, posts }) {
 
   // Extract headings for navigation
   const headings = [];
-  const textContent = post.content || post.excerpt || "";
-  const parts = textContent.split(/\n\n+/);
+  const rawContent = post.content || post.excerpt || "";
+  const textContent = rawContent.replace(/([^\n])\s*(#{1,3} )/g, '$1\n\n$2');
+  const parts = textContent.split(/\n+/);
   parts.forEach((part, i) => {
     if (part.startsWith('## ')) {
-      headings.push({ id: `heading-${i}`, text: part.replace(/^## /, '') });
+      headings.push({ id: `heading-${i}`, text: part.replace(/^## /, '').replace(/\*/g, '') });
     }
   });
 
   const renderContent = (text) => {
     if (!text) return null;
-    const parts = text.split(/\n\n+/);
+    const fixedText = text.replace(/([^\n])\s*(#{1,3} )/g, '$1\n\n$2');
+    const parts = fixedText.split(/\n+/);
+    
+    const parseInline = (str) => {
+      let res = str
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.*?)\*/g, '<em>$1</em>');
+      return { __html: res };
+    };
+
     return parts.map((part, i) => {
-      if (part.startsWith('# ')) return <h1 key={i} className="ei-blog-h1">{part.replace(/^# /, '')}</h1>;
-      if (part.startsWith('## ')) return <h2 key={i} id={`heading-${i}`} className="ei-blog-h2">{part.replace(/^## /, '')}</h2>;
-      if (part.startsWith('### ')) return <h3 key={i} className="ei-blog-h3">{part.replace(/^### /, '')}</h3>;
+      if (part.startsWith('# ')) return <h1 key={i} className="ei-blog-h1" dangerouslySetInnerHTML={parseInline(part.replace(/^# /, ''))} />;
+      if (part.startsWith('## ')) return <h2 key={i} id={`heading-${i}`} className="ei-blog-h2" dangerouslySetInnerHTML={parseInline(part.replace(/^## /, ''))} />;
+      if (part.startsWith('### ')) return <h3 key={i} className="ei-blog-h3" dangerouslySetInnerHTML={parseInline(part.replace(/^### /, ''))} />;
       if (part.match(/^- /m)) {
-        const lis = part.split('\n').filter(l => l.trim().startsWith('- ')).map((l, j) => <li key={j}>{l.replace(/^- /, '')}</li>);
+        const lis = part.split('\n').filter(l => l.trim().startsWith('- ')).map((l, j) => <li key={j} dangerouslySetInnerHTML={parseInline(l.replace(/^- /, ''))} />);
         return <ul key={i} className="ei-blog-ul">{lis}</ul>;
       }
-      return <p key={i} className="ei-blog-p">{part}</p>;
+      return <p key={i} className="ei-blog-p" dangerouslySetInnerHTML={parseInline(part)} />;
     });
   };
 
