@@ -1957,6 +1957,7 @@ const CSS = `
 .ei-qa-bubble-avatar-team { background: var(--orange); }
 .ei-qa-bubble-qtext { flex: 1; padding-top: 4px; }
 .ei-qa-bubble-qtext strong { display: block; margin-top: 4px; font-family: var(--display); font-weight: 800; font-size: 15px; color: var(--ink); line-height: 1.4; }
+.ei-qa-q-meta { display: block; margin-top: 4px; color: var(--stone); font-size: 11.5px; font-weight: 600; }
 .ei-qa-cat-tag {
   display: inline-block; background: rgba(13,31,61,0.06); color: var(--navy); font-size: 10.5px; font-weight: 800;
   letter-spacing: 0.02em; padding: 3px 9px; border-radius: 999px; text-transform: uppercase; margin-right: 6px;
@@ -4931,6 +4932,19 @@ const QA_CATEGORIES = [
   { id: "courses", label: "Courses & Career", icon: "GraduationCap" },
 ];
 
+/** Formats raw Google Sheet date values (like "Date(2026,7,3)" or formatted string) into YYYY-MM-DD */
+function formatQADate(raw) {
+  if (!raw) return "";
+  const match = String(raw).match(/Date\((\d+),\s*(\d+),\s*(\d+)\)/);
+  if (match) {
+    const y = match[1];
+    const m = String(Number(match[2]) + 1).padStart(2, "0");
+    const d = String(match[3]).padStart(2, "0");
+    return `${y}-${m}-${d}`;
+  }
+  return String(raw).trim();
+}
+
 /** Parse the Q&A Google Sheet gviz JSON response into question objects */
 function parseQARows(raw) {
   try {
@@ -4945,14 +4959,14 @@ function parseQARows(raw) {
 
     cols.forEach((col, idx) => {
       const label = (col?.label || col?.id || '').toString().toLowerCase().trim();
-      if (label.includes('id')) colIndices.id = idx;
+      if (label === 'id') colIndices.id = idx;
       else if (label.includes('categ')) colIndices.category = idx;
       else if (label.includes('question')) colIndices.question = idx;
-      else if (label.includes('answer')) colIndices.answer = idx;
+      else if (label.includes('dateadded') || (label.includes('date') && label.includes('add'))) colIndices.dateAdded = idx;
+      else if (label.includes('answered') || label.includes('dateanswered')) colIndices.dateAnswered = idx;
+      else if (label === 'answer' || (label.includes('answer') && !label.includes('date'))) colIndices.answer = idx;
       else if (label.includes('status')) colIndices.status = idx;
       else if (label.includes('submit')) colIndices.submittedBy = idx;
-      else if (label.includes('dateadded') || (label.includes('date') && label.includes('add'))) colIndices.dateAdded = idx;
-      else if (label.includes('answered')) colIndices.dateAnswered = idx;
       else if (label.includes('feat')) colIndices.featured = idx;
     });
 
@@ -4971,8 +4985,8 @@ function parseQARows(raw) {
           answer: cell(colIndices.answer),
           status: (cell(colIndices.status) || 'pending').toLowerCase(),
           submittedBy: cell(colIndices.submittedBy),
-          dateAdded: cell(colIndices.dateAdded),
-          dateAnswered: cell(colIndices.dateAnswered),
+          dateAdded: formatQADate(cell(colIndices.dateAdded)),
+          dateAnswered: formatQADate(cell(colIndices.dateAnswered)),
           featured: ['true', 'yes', '1', 'featured', 'y'].includes(featVal),
         };
       })
@@ -6373,6 +6387,12 @@ function QAPage({ navigate, openGuidance }) {
                           {q.featured && <span className="ei-qa-featured-tag">Popular</span>}
                           {isSearching && <span className="ei-qa-cat-tag">{q.category}</span>}
                           <strong>{q.question}</strong>
+                          {(q.submittedBy || q.dateAdded) && (
+                            <span className="ei-qa-q-meta">
+                              {q.submittedBy ? `Asked by ${q.submittedBy}` : "Student Question"}
+                              {q.dateAdded ? ` • Asked on ${q.dateAdded}` : ""}
+                            </span>
+                          )}
                         </span>
                         <ChevronDown size={18} className="ei-qa-chev" />
                       </button>
@@ -6380,7 +6400,10 @@ function QAPage({ navigate, openGuidance }) {
                         <span className="ei-qa-bubble-avatar ei-qa-bubble-avatar-team">EI</span>
                         <div>
                           <p>{q.answer}</p>
-                          <span className="ei-qa-answered-tag">EasyIntake Team{q.submittedBy ? ` · asked by ${q.submittedBy}` : ""}</span>
+                          <span className="ei-qa-answered-tag">
+                            EasyIntake Team
+                            {q.dateAnswered ? ` • Answered on ${q.dateAnswered}` : ""}
+                          </span>
                         </div>
                       </div>
                     </div>
