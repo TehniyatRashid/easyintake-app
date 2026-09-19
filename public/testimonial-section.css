@@ -1,0 +1,48 @@
+/* Homepage video testimonials: follows the existing EasyIntake sticker language. */
+.ei-video-testimonials { background: #F05A28 !important; overflow: hidden; isolation: isolate; }
+.ei-video-testimonials .ei-live-doodle { display: none; }
+.ei-video-testimonials::before,
+.ei-video-testimonials::after,
+.ei-video-testimonials .ei-video-grid::before,
+.ei-video-testimonials .ei-video-grid::after {
+  content: ""; position: absolute; z-index: -1; pointer-events: none; display: block;
+  background-repeat: no-repeat; background-position: center; background-size: contain;
+  filter: drop-shadow(5px 7px 0 rgba(13,31,61,.14));
+}
+.ei-video-testimonials::before { width: 148px; height: 116px; left: 4%; top: 10%; background-image: url('/testimonial-plane-sticker.svg'); transform: rotate(-12deg); }
+.ei-video-testimonials::after { width: 116px; height: 116px; right: 4%; bottom: 8%; background-image: url('/testimonial-globe-sticker.svg'); transform: rotate(9deg); }
+.ei-video-testimonials .ei-video-grid { position: relative; z-index: 1; }
+.ei-video-testimonials .ei-video-grid::before { width: 84px; height: 84px; left: -78px; bottom: 13%; background-image: url('/testimonial-star-sticker.svg'); transform: rotate(-11deg); }
+.ei-video-testimonials .ei-video-grid::after { width: 125px; height: 96px; right: -115px; top: 10%; background-image: url('/testimonial-cap-sticker.svg'); transform: rotate(10deg); }
+.ei-video-testimonials .ei-video-head { max-width: 700px; margin-bottom: 40px; }
+.ei-video-testimonials .ei-eyebrow { display: none; }
+.ei-video-testimonials .ei-h2 { margin: 0; color: transparent; font-size: 0; text-shadow: none; }
+.ei-video-testimonials .ei-h2::before {
+  content: "2,500+ Admissions Secured"; display: block; color: #FFFFFF;
+  font-family: 'Bricolage Grotesque', 'Manrope', sans-serif; font-size: clamp(34px, 5vw, 60px);
+  font-weight: 800; line-height: 1.04; letter-spacing: -.045em;
+}
+.ei-video-testimonials .ei-h2::after {
+  content: "Real Students. Real Journeys."; display: inline-block; margin-top: 14px; padding: 7px 14px 8px;
+  color: #0D1F3D; background: #FFFFFF; border: 3px solid #FFFFFF; border-radius: 999px;
+  box-shadow: 3px 4px 0 rgba(13,31,61,.18); font-family: 'Bricolage Grotesque', 'Manrope', sans-serif;
+  font-size: 13px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase;
+}
+.ei-video-testimonials .ei-sub2 { max-width: 570px; margin: 16px auto 0; color: transparent; font-size: 0; }
+.ei-video-testimonials .ei-sub2::after {
+  content: "See the journeys behind the number, from choosing Malaysia to arriving with confidence.";
+  color: rgba(255,255,255,.96); font-family: 'Manrope', sans-serif; font-size: 16px; font-weight: 600; line-height: 1.55;
+}
+.ei-video-testimonials .ei-video-card { border: 4px solid #FFFFFF; box-shadow: 0 15px 0 rgba(13,31,61,.16), 0 21px 36px rgba(13,31,61,.22); }
+@media (max-width: 980px) {
+  .ei-video-testimonials::before { left: 1%; width: 110px; }
+  .ei-video-testimonials::after { right: 1%; width: 95px; }
+  .ei-video-testimonials .ei-video-grid::before { left: -28px; }
+  .ei-video-testimonials .ei-video-grid::after { right: -36px; }
+}
+@media (max-width: 700px) {
+  .ei-video-testimonials::before, .ei-video-testimonials::after,
+  .ei-video-testimonials .ei-video-grid::before, .ei-video-testimonials .ei-video-grid::after { display: none; }
+  .ei-video-testimonials .ei-h2::after { font-size: 11px; }
+  .ei-video-testimonials .ei-sub2::after { font-size: 14px; }
+}
