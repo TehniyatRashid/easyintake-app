@@ -660,6 +660,24 @@ const CSS = `
 .ei-story-dot:hover { background: #B9AF9F; }
 .ei-story-dot-on { background: var(--orange); width: 26px; border-radius: 999px; }
 
+/* ---------- Homepage video testimonials ---------- */
+.ei-video-testimonials { background: #FFFFFF; overflow: hidden; }
+.ei-video-head { text-align: center; max-width: 620px; margin: 0 auto 34px; }
+.ei-video-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; max-width: 960px; margin: 0 auto; }
+.ei-video-card { appearance: none; border: 0; padding: 0; background: none; cursor: pointer; text-align: left; position: relative; border-radius: 22px; overflow: hidden; aspect-ratio: 9 / 14.5; box-shadow: 0 14px 32px rgba(13,31,61,.16); transition: transform .3s var(--ease-spring), box-shadow .3s ease; }
+.ei-video-card:hover { transform: translateY(-6px) rotate(-.7deg); box-shadow: 0 20px 42px rgba(13,31,61,.23); }
+.ei-video-card img, .ei-video-card video { width: 100%; height: 100%; display: block; object-fit: cover; }
+.ei-video-card-playing { cursor: default; transform: none; box-shadow: 0 14px 32px rgba(13,31,61,.16); }
+.ei-video-card-playing:hover { transform: none; box-shadow: 0 14px 32px rgba(13,31,61,.16); }
+.ei-video-scrim { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(13,31,61,.03) 38%, rgba(13,31,61,.72) 100%); }
+.ei-video-play { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 60px; height: 60px; display: grid; place-items: center; border-radius: 50%; color: var(--navy); background: #FFFFFF; border: 4px solid rgba(255,255,255,.72); box-shadow: 0 5px 16px rgba(0,0,0,.22); transition: transform .25s var(--ease-spring); }
+.ei-video-card:hover .ei-video-play { transform: translate(-50%, -50%) scale(1.1); }
+.ei-video-modal { position: fixed; inset: 0; z-index: 1000; display: grid; place-items: center; padding: 24px; background: rgba(13,31,61,.82); backdrop-filter: blur(7px); }
+.ei-video-dialog { position: relative; width: min(100%, 410px); max-height: calc(100vh - 48px); }
+.ei-video-dialog video, .ei-video-dialog iframe { display: block; width: 100%; max-width: 100%; max-height: calc(100vh - 48px); aspect-ratio: 9 / 16; border: 0; border-radius: 22px; background: #000; box-shadow: 0 24px 70px rgba(0,0,0,.44); }
+.ei-video-close { position: absolute; z-index: 1; top: 10px; right: 10px; width: 38px; height: 38px; display: grid; place-items: center; border: 0; border-radius: 50%; cursor: pointer; color: var(--navy); background: #FFFFFF; box-shadow: 0 4px 14px rgba(0,0,0,.2); }
+@media (max-width: 700px) { .ei-video-grid { gap: 12px; } .ei-video-card { border-radius: 14px; } .ei-video-play { width: 42px; height: 42px; border-width: 3px; } }
+
 /* ---------- Journey scholarship CTA ---------- */
 .ei-j-cta {
   margin-top: 44px; background: var(--navy); border-radius: 28px;
@@ -1531,7 +1549,7 @@ const CSS = `
 
 /* ==================== HOW WE HELP (flight journey) ==================== */
 .ei-hw-zone { position: relative; background: #FBF6EC; }
-.ei-hw-journey { position: relative; max-width: 1160px; margin: 0 auto; height: 1600px; }
+.ei-hw-journey { position: relative; max-width: 1160px; margin: 0 auto; height: 2080px; }
 @media (max-width: 899px) { .ei-hw-journey { height: auto; padding: 40px 18px 20px; } }
 .ei-hw-svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
 @media (max-width: 899px) { .ei-hw-svg { display: none; } }
@@ -2590,6 +2608,13 @@ const STORIES = [
     c: "#DB2777",
   },
 ];
+
+const VIDEO_TESTIMONIALS = [
+  { src: "/testimonials/student-story-01.mp4", poster: "/testimonials/student-story-01.jpg", label: "Watch student story 1" },
+  { src: "/testimonials/student-story-02.mp4", poster: "/testimonials/student-story-02.jpg", label: "Watch student story 2" },
+  { src: "/testimonials/student-story-03.mp4", poster: "/testimonials/student-story-03.jpg", label: "Watch student story 3" },
+];
+
 
 const STUDENT_CARES = ["Scholarships", "University Choice", "Career Opportunities", "Student Life & Experience"];
 const PARENT_CARES = ["Safety & Security", "Affordability", "Accreditation & Recognition", "Visa Support", "Graduate Outcomes"];
@@ -4540,16 +4565,20 @@ const HW_STOPS = [
   },
   {
     n: "04", title: "Pre-Departure Support", art: "hwstop4",
-    body: "Once you're admitted, we help you prepare for life in Malaysia, from accommodation guidance to arrival planning and practical tips."
+    body: "Once you're admitted, we help you prepare for life in Malaysia, from arrival planning and practical tips to what to expect when you land."
   },
   {
-    n: "05", title: "Ongoing Support in Malaysia", art: "hwstop5",
-    body: "Our support doesn't end when you land. If you have questions during your first weeks in Malaysia, we're still here to help."
+    n: "05", title: "Accommodation Guidance", art: "hwstop5",
+    body: "Need a place to stay? We help you understand accommodation options near your university and plan ahead. Our accommodation guidance is 100% free."
+  },
+  {
+    n: "06", title: "First-Week Support", art: "backpack",
+    body: "Our support doesn't end when you land. We’re here to answer practical questions during your first week in Malaysia, so you can settle in with confidence."
   },
 ];
-const HW_W = 1000, HW_H = 1800;
-const HW_STOP_Y = [200, 480, 760, 1040, 1320];
-const HW_PATH = "M 180 -20 C 180 80, 252 120, 250 200 C 248 270, 130 285, 130 340 C 130 395, 252 410, 251 480 C 250 550, 129 565, 129 620 C 129 675, 252 690, 251 760 C 250 830, 128 845, 128 900 C 128 955, 252 970, 251 1040 C 250 1110, 127 1125, 127 1180 C 127 1235, 251 1250, 250 1320 C 249 1400, 340 1480, 470 1560";
+const HW_W = 1000, HW_H = 2080;
+const HW_STOP_Y = [200, 480, 760, 1040, 1320, 1600];
+const HW_PATH = "M 180 -20 C 180 80, 252 120, 250 200 C 248 270, 130 285, 130 340 C 130 395, 252 410, 251 480 C 250 550, 129 565, 129 620 C 129 675, 252 690, 251 760 C 250 830, 128 845, 128 900 C 128 955, 252 970, 251 1040 C 250 1110, 127 1125, 127 1180 C 127 1235, 251 1250, 250 1320 C 249 1400, 130 1415, 130 1470 C 130 1525, 252 1540, 251 1600 C 250 1680, 340 1770, 470 1860";
 
 const StampSVG = ({ label, sub = "Approved" }) => (
   <svg viewBox="0 0 100 100" style={{ width: "100%", height: "100%" }} aria-hidden="true">
@@ -4760,7 +4789,7 @@ function HowWeHelpPage({ navigate, openGuidance, openBooking }) {
             <span className="ei-hw-dust" aria-hidden="true"><span /><span /><span /></span>
           </div>
 
-          {/* five journey stops */}
+          {/* six journey stops */}
           {HW_STOPS.map((s, i) => (
             <div
               className="ei-hw-stop"
@@ -5306,7 +5335,7 @@ function BlogDetailPage({ navigate, openGuidance, openBooking, slug, posts }) {
   );
 }
 
-function BlogsPage({ navigate, openGuidance, openBooking }) {
+function BlogsPage({ navigate, openGuidance, openBooking, activeSlug, openPost }) {
   const [activeCat, setActiveCat] = useState("All");
   const [visible, setVisible] = useState(6);
   const [email, setEmail] = useState("");
@@ -5314,7 +5343,6 @@ function BlogsPage({ navigate, openGuidance, openBooking }) {
   const [subscribing, setSubscribing] = useState(false);
   const [posts, setPosts] = useState([]);
   const [sheetLoading, setSheetLoading] = useState(true);
-  const [activeSlug, setActiveSlug] = useState(null);
 
   const subscribeNewsletter = async () => {
     if (!email.includes("@") || subscribing) return;
@@ -5371,7 +5399,7 @@ function BlogsPage({ navigate, openGuidance, openBooking }) {
   const featuredArticle = posts.find((p) => p.featured) || (posts.length > 0 ? posts[0] : null);
 
   if (activeSlug) {
-    return <BlogDetailPage navigate={() => setActiveSlug(null)} openGuidance={openGuidance} openBooking={openBooking} slug={activeSlug} posts={posts} />;
+    return <BlogDetailPage navigate={() => navigate("blogs")} openGuidance={openGuidance} openBooking={openBooking} slug={activeSlug} posts={posts} />;
   }
 
 
@@ -5475,7 +5503,7 @@ function BlogsPage({ navigate, openGuidance, openBooking }) {
                     {(featuredArticle.author || featuredArticle.date) && <span><User size={15} /> {featuredArticle.author || featuredArticle.date}</span>}
                   </div>
                   {featuredArticle.slug && featuredArticle.slug.trim() !== '' ? (
-                    <a href="#" onClick={(e) => { e.preventDefault(); setActiveSlug(featuredArticle.slug); }} className="ei-bl-read" style={{ marginTop: 22, textDecoration: "none", display: "inline-flex" }}>
+                    <a href={`/blogs/${encodeURIComponent(featuredArticle.slug)}`} onClick={(e) => { e.preventDefault(); openPost(featuredArticle.slug); }} className="ei-bl-read" style={{ marginTop: 22, textDecoration: "none", display: "inline-flex" }}>
                       Read Article <ArrowRight size={16} />
                     </a>
                   ) : featuredArticle.url && featuredArticle.url.trim() !== '' ? (
@@ -5528,7 +5556,7 @@ function BlogsPage({ navigate, openGuidance, openBooking }) {
             const isLinkable = hasSlug || hasExternalUrl;
             const CardTag = isLinkable ? 'a' : 'div';
             const cardProps = hasSlug
-              ? { href: "#", onClick: (e) => { e.preventDefault(); setActiveSlug(p.slug); } }
+              ? { href: `/blogs/${encodeURIComponent(p.slug)}`, onClick: (e) => { e.preventDefault(); openPost(p.slug); } }
               : hasExternalUrl 
                 ? { href: p.url, target: "_blank", rel: "noopener noreferrer" } 
                 : {};
@@ -6781,26 +6809,48 @@ function ScholarshipsPage({ navigate, openGuidance, openBooking, openScholarship
 
 /* ------------------------------ Page ------------------------------- */
 
+const universitySlug = (name = "") => name
+  .toLowerCase()
+  .replace(/&/g, "and")
+  .replace(/[^a-z0-9]+/g, "-")
+  .replace(/^-+|-+$/g, "");
+
+/* Keep the location as the source of truth. This is intentionally a small
+   router rather than a new dependency, so the existing UI stays unchanged. */
+function routeFromPath(pathname = window.location.pathname) {
+  const parts = pathname.replace(/^\/+|\/+$/g, "").split("/").filter(Boolean);
+  const [section, value] = parts;
+  const pages = ["universities", "about", "how", "blogs", "scholarships", "qa"];
+
+  if (section === "blogs" && value) return { page: "blogs", blogSlug: decodeURIComponent(value) };
+  if (section === "universities" && value) {
+    const uni = UNI_DATA.find((item) => universitySlug(item.name) === decodeURIComponent(value));
+    return uni ? { page: "uniDetail", uni, blogSlug: null } : { page: "universities", blogSlug: null };
+  }
+  return { page: pages.includes(section) ? section : "home", blogSlug: null };
+}
+
 export default function EasyIntakePage() {
   const rootRef = useRef(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [go, setGo] = useState(false);
+  const initialRoute = routeFromPath();
   const [page, setPage] = useState(() => {
-    const p = window.location.pathname.replace(/^\/+/, '');
-    const validPages = ['universities', 'about', 'how', 'blogs', 'scholarships'];
-    return validPages.includes(p) ? p : 'home';
+    return initialRoute.page;
   });
+  const [detailUni, setDetailUni] = useState(() => initialRoute.uni || null);
+  const [blogSlug, setBlogSlug] = useState(() => initialRoute.blogSlug || null);
 
   useEffect(() => {
     const handlePopState = () => {
-      const p = window.location.pathname.replace(/^\/+/, '');
-      const validPages = ['universities', 'about', 'how', 'blogs', 'scholarships'];
-      setPage(validPages.includes(p) ? p : 'home');
+      const route = routeFromPath();
+      setPage(route.page);
+      setDetailUni(route.uni || null);
+      setBlogSlug(route.blogSlug || null);
     };
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
-  const [detailUni, setDetailUni] = useState(null);
   const [detailScholarship, setDetailScholarship] = useState(null);
 
   useEffect(() => {
@@ -6855,6 +6905,7 @@ export default function EasyIntakePage() {
      fighting them, and stays off from then on. */
   const [storyIdx, setStoryIdx] = useState(0);
   const [storyPaused, setStoryPaused] = useState(false);
+  const [activeVideo, setActiveVideo] = useState(null);
   const goStory = (i) => {
     setStoryPaused(true);
     setStoryIdx(((i % STORIES.length) + STORIES.length) % STORIES.length);
@@ -6873,7 +6924,7 @@ export default function EasyIntakePage() {
 
   const openUni = (u) => {
     setDetailUni(u);
-    window.history.pushState(null, '', '/university');
+    window.history.pushState(null, '', `/universities/${universitySlug(u.name)}`);
     setPage("uniDetail");
     setTimeout(() => window.scrollTo({ top: 0, behavior: "auto" }), 40);
   };
@@ -6899,6 +6950,13 @@ export default function EasyIntakePage() {
     }, 80);
   };
 
+  const openPost = (slug) => {
+    window.history.pushState(null, '', `/blogs/${encodeURIComponent(slug)}`);
+    setBlogSlug(slug);
+    setPage("blogs");
+    setTimeout(() => window.scrollTo({ top: 0, behavior: "auto" }), 40);
+  };
+
   /* The two sitewide conversion actions. Both open as an overlay rather than
      navigating away, so context is never lost — this matters most on pages
      like University Detail where leaving the page would lose the person's place. */
@@ -6912,14 +6970,16 @@ export default function EasyIntakePage() {
   /* simple client-side routing between Home and About */
   const navigate = (p, anchor) => {
     setMenuOpen(false);
+    if (p === "blogs") setBlogSlug(null);
     /* Reaching the directory any other way (nav bar, footer, a CTA) should show
        the full list, not a course filter left over from an earlier click. */
     setCourseFilter(null);
     if (p !== page) {
-      if (['home', 'universities', 'about', 'how', 'blogs'].includes(p)) {
+      if (['home', 'universities', 'about', 'how', 'blogs', 'scholarships', 'qa'].includes(p)) {
         window.history.pushState(null, '', p === 'home' ? '/' : `/${p}`);
       }
       setPage(p);
+      setBlogSlug(null);
       setTimeout(() => {
         if (anchor) {
           const el = document.querySelector(anchor);
@@ -7006,7 +7066,7 @@ export default function EasyIntakePage() {
       <header className="ei-nav-wrap">
         <nav className="ei-nav">
           <div className="ei-pre ei-a-drop" style={{ "--d": "0.15s" }}>
-            <a href="#home" className="ei-logo" aria-label="EasyIntake Home">
+            <a href="/" onClick={(e) => { e.preventDefault(); navigate("home"); }} className="ei-logo" aria-label="EasyIntake Home">
               <FullLogo height={30} />
             </a>
           </div>
@@ -7086,7 +7146,7 @@ export default function EasyIntakePage() {
       ) : page === "how" ? (
         <HowWeHelpPage navigate={navigate} openGuidance={openGuidance} openBooking={openBooking} />
       ) : page === "blogs" ? (
-        <BlogsPage navigate={navigate} openGuidance={openGuidance} openBooking={openBooking} />
+        <BlogsPage navigate={navigate} openGuidance={openGuidance} openBooking={openBooking} activeSlug={blogSlug} openPost={openPost} />
       ) : page === "scholarships" ? (
         <ScholarshipsPage navigate={navigate} openGuidance={openGuidance} openBooking={openBooking} openScholarship={openScholarship} />
       ) : page === "scholarshipDetail" ? (
@@ -7329,6 +7389,36 @@ export default function EasyIntakePage() {
             </div>
           </section>
 
+          {/* ================= VIDEO TESTIMONIALS ================= */}
+          <div className="ei-shell">
+            <section className="ei-video-testimonials ei-block">
+              <SectionDoodles tint="rgba(240,90,40,0.22)" />
+              <div className="ei-wrap">
+                <div className="ei-video-head">
+                  <span className="ei-eyebrow" data-reveal>Student Stories</span>
+                  <h2 className="ei-h2" data-reveal style={{ "--d": "0.08s" }}>Hear It From Students</h2>
+                  <p className="ei-sub2" data-reveal style={{ "--d": "0.14s" }}>Real experiences from students who made Malaysia their next step.</p>
+                </div>
+                <div className="ei-video-grid">
+                  {VIDEO_TESTIMONIALS.map((item, i) => {
+                    const isPlaying = activeVideo?.src === item.src;
+                    return isPlaying ? (
+                      <div className="ei-video-card ei-video-card-playing" key={item.src}>
+                        <video src={item.src} controls autoPlay playsInline poster={item.poster} onEnded={() => setActiveVideo(null)} />
+                      </div>
+                    ) : (
+                      <button type="button" className="ei-video-card" key={item.src} onClick={() => setActiveVideo(item)} aria-label={item.label}>
+                        <img src={item.poster} alt="Student video testimonial" loading="lazy" />
+                        <span className="ei-video-scrim" aria-hidden="true" />
+                        <span className="ei-video-play" aria-hidden="true"><Play size={19} fill="currentColor" /></span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            </section>
+          </div>
+
           {/* ==================== FEATURED UNIVERSITIES ==================== */}
           <div className="ei-shell">
             <section id="universities" className="ei-uni ei-block">
@@ -7447,7 +7537,7 @@ export default function EasyIntakePage() {
             </section>
           </div>
 
-          {/* ==================== TESTIMONIAL ==================== */}
+          {/* ==================== TEXT TESTIMONIALS ==================== */}
           <div className="ei-shell">
             <section className="ei-quote-sec ei-block">
               <SectionDoodles />
